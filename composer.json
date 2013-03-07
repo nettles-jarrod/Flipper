@@ -1,0 +1,16 @@
+{
+    "name": "Flipper Object Mapping",
+    "description": "An object mapper that gives you what you want and gets out of your way. Done.",
+
+    "require": {
+        "doctrine/orm": "2.3.*",
+        "doctrine/dbal": "2.3.*"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Flipper": "src",
+            "Flipper\\Tests": "tests"
+        }
+    }
+}
