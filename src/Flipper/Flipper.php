@@ -2,16 +2,27 @@
 
 namespace Flipper;
 
+use \Doctrine\DBAL\Connection as DBALConnection,
+    \Doctrine\DBAL\Statement;
+
+use \Flipper\Mapper\Mapper;
+
 class Flipper
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
     protected $options = [
         'defaultSplitter'   => 'id',
         'entityStore'       => '\\'
     ];
 
-    public function __construct(array $options = [])
+    public function __construct(DBALConnection $connection = null, array $options = [])
     {
-        $this->options = array_merge($this->options, $options);
+        $this->connection = $connection;
+        $this->setOptions($options);
     }
 
     public static function _(array $options = [])
@@ -19,126 +30,38 @@ class Flipper
         return new static($options);
     }
 
-    public function map($requestedObjects, array $dataSource, $splitMapper = [])
+    public function setOptions(array $options)
     {
-        if(!is_array($requestedObjects)) {
-            $requestedObjects = [$requestedObjects];
-        }
-
-        $splitMapper = $this->setupSplitMapper($splitMapper);
-
-        $result = $this->mapDataSource($requestedObjects, $dataSource, $splitMapper);
-
-        return $result;
+        $this->options = array_merge($this->options, $options);
     }
 
-    public function mapOne($requestedObjects, array $dataSource, $splitMapper = [])
+    public function query($requestedTypes, $sql, $params = [], $splitMapper = [])
     {
-        $result = $this->map($requestedObjects, $dataSource, $splitMapper);
+        if(!$sql instanceof Statement) {
+            $sql = $this->connection->prepare($sql);
+        }
+
+        $sql->execute($params);
+        $results = $sql->fetchAll();
+
+        return Mapper::_($this->options)->map($requestedTypes, $results, $splitMapper);
+    }
+
+    public function queryOne($requestedTypes, $sql, $params = [], $splitMapper = [])
+    {
+        $result = $this->query($requestedTypes, $sql, $params, $splitMapper);
 
         if($result && isset($result[0])) {
-            return $result[0];
+            return $result;
         }
 
         return null;
     }
 
-    public function loadEntity($entityName)
+    protected function bindParameters(Statement $statement, array $params)
     {
-        if(isset($this->options['entityStore'])) {
-            $entityName = $this->options['entityStore'] . $entityName;
+        foreach($params as $key => $value) {
+            $statement->bindValue($key, $value);
         }
-
-        return new $entityName();
-    }
-
-    private function setupSplitMapper($splitMapper)
-    {
-        if(is_array($splitMapper)) {
-            return $splitMapper;
-        }
-
-        if(is_null($splitMapper) || empty($splitMapper)) {
-            return [$this->options['defaultSplitter']];
-        }
-
-        if(is_string($splitMapper)) {
-            return explode(',', $splitMapper);
-        }
-
-        throw new \Exception('Split mapper does not follow a proper format.');
-    }
-
-    private function mapDataSource(array $requestedObjects, array $dataSource, array $splitMapper)
-    {
-        $results = [];
-
-        if($this->isMultipleResults($dataSource)) {
-
-            foreach($dataSource as $row) { //loop through each row in the resultset
-                $objects = $this->createEntities($requestedObjects);
-                $results[] = $this->mapRow($row, $objects, $splitMapper);
-            }
-
-        } else {
-            $objects = $this->createEntities($requestedObjects);
-            $results[] = $this->mapRow($dataSource, $objects, $splitMapper);
-        }
-
-        return $results;
-    }
-
-    private function mapRow($row, $objects, $splitMapper)
-    {
-        $currentObject = reset($objects);
-
-        foreach($row as $key => $value) {
-
-            if(reset($splitMapper) === $key) {
-                array_shift($splitMapper);
-                $currentObject = next($objects);
-            }
-
-            $setterMethod = 'set' . $key;
-
-            if(method_exists($currentObject, $setterMethod)) {
-                $currentObject->$setterMethod($value);
-            } else {
-                $currentObject->$key = $value;
-            }
-        }
-
-        if(1 === count($objects)) {
-            return reset($objects);
-        }
-
-        return $objects;
-    }
-
-    private function createEntities(array $requestedObjects)
-    {
-        $objects = [];
-
-        foreach($requestedObjects as $entityName) {
-            $entityReference = $this->getEntityReferenceName($entityName);
-            $objects[$entityReference] = $this->loadEntity($entityName);
-        }
-
-        return $objects;
-    }
-
-    private function isMultipleResults(array $dataSource)
-    {
-        if(count($dataSource) == count($dataSource, COUNT_RECURSIVE)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private function getEntityReferenceName($entityNamespacedClass)
-    {
-        $chunks = explode('\\', $entityNamespacedClass);
-        return strtolower(end($chunks));
     }
 }

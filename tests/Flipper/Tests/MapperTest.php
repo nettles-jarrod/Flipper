@@ -2,14 +2,17 @@
 
 namespace Flipper\Tests;
 
-use Flipper\Flipper;
+use Flipper\Mapper\Mapper;
 
-class FlipperTest extends \PHPUnit_Framework_TestCase
+/**
+ * @group Flipper
+ */
+class MapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Flipper\Flipper
+     * @var \Flipper\Mapper\Mapper
      */
-    protected $flipper;
+    protected $mapper;
 
     protected $singleSet = [
         'id'    => 1,
@@ -32,21 +35,20 @@ class FlipperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->flipper = new Flipper([
+        $this->mapper = new Mapper([
             'entityStore' => 'Flipper\\Tests\\Entity\\'
         ]);
     }
 
-    public function testEntityLoader()
+    public function testStaticConstruct()
     {
-        $entity = $this->flipper->loadEntity('Post');
-
-        $this->assertInstanceOf('Flipper\Tests\Entity\Post', $entity);
+        $mapper = Mapper::_();
+        $this->assertInstanceOf('\Flipper\Mapper\Mapper', $mapper);
     }
 
     public function testMapOne()
     {
-        $post = $this->flipper->mapOne('Post', $this->singleSet);
+        $post = $this->mapper->mapOne('Post', $this->singleSet);
 
         $this->assertSame(1, $post->getId());
         $this->assertSame('title1', $post->getTitle());
@@ -55,7 +57,7 @@ class FlipperTest extends \PHPUnit_Framework_TestCase
 
     public function testMap()
     {
-        $post = $this->flipper->map('Post', $this->singleSet);
+        $post = $this->mapper->map('Post', $this->singleSet);
 
         $this->assertSame(1, $post[0]->getId());
         $this->assertSame('title1', $post[0]->getTitle());
@@ -64,7 +66,7 @@ class FlipperTest extends \PHPUnit_Framework_TestCase
 
     public function testMultiRowMap()
     {
-        $posts = $this->flipper->map('Post', $this->multipleSet);
+        $posts = $this->mapper->map('Post', $this->multipleSet);
 
         $this->assertSame(1, $posts[0]->getId());
         $this->assertSame('title1', $posts[0]->getTitle());
@@ -86,7 +88,7 @@ class FlipperTest extends \PHPUnit_Framework_TestCase
             'body'      => 'Dark spruce forest frowned on either side the frozen waterway.'
         ];
 
-        $results = $this->flipper->mapOne(['Author', 'Post'], $set, $splitMapper = ['id']);
+        $results = $this->mapper->mapOne(['Author', 'Post'], $set, $splitMapper = ['id']);
 
         $this->assertSame(1,             $results['author']->author_id);
         $this->assertSame('Jack London', $results['author']->name);
@@ -95,5 +97,35 @@ class FlipperTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(3,             $results['post']->getId());
         $this->assertSame('White Fang',  $results['post']->getTitle());
         $this->assertStringStartsWith('Dark spruce forest', $results['post']->getBody());
+    }
+
+    public function testMultipleObjectMap()
+    {
+        $set = [
+            [
+                'author_id' => 1,
+                'name'      => 'Jack London',
+                'birth'     => '1/12/1876',
+                'id'        => 3,
+                'title'     => 'White Fang',
+                'body'      => 'Dark spruce forest frowned on either side the frozen waterway.'
+            ],
+            [
+                'author_id' => 2,
+                'name'      => 'Herman Melville',
+                'birth'     => '8/1/1819',
+                'id'        => 4,
+                'title'     => 'Moby-Dick',
+                'body'      => 'Call me Ishmael.'
+            ]
+        ];
+
+
+        $results = $this->mapper->map(['Author', 'Post'], $set, $splitMapper = ['id']);
+
+        $this->assertCount(2, $results);
+
+        $this->assertSame('White Fang', $results[0]['post']->getTitle());
+        $this->assertSame('Moby-Dick',  $results[1]['post']->getTitle());
     }
 }
