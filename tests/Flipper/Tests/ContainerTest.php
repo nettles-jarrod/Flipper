@@ -5,7 +5,7 @@ namespace Flipper\Tests;
 use Flipper\Container;
 
 /**
- * @group Mappable
+ * @group Container
  */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {

@@ -75,13 +75,15 @@ class Mapper implements Mappable
                 $currentObject = next($objects);
             }
 
-            $setterMethod = 'set' . $key;
+            $this->mapProperty($currentObject, $key, $value);
+
+            /*$setterMethod = 'set' . $key;
 
             if(method_exists($currentObject, $setterMethod)) {
                 $currentObject->$setterMethod($value);
             } else {
                 $currentObject->$key = $value;
-            }
+            }*/
         }
 
         if(1 === count($objects)) {
@@ -89,6 +91,21 @@ class Mapper implements Mappable
         }
 
         return $objects;
+    }
+
+    protected function mapProperty($targetObject, $propertyName, $value)
+    {
+        $setterMethod = 'set' . $propertyName;
+
+        if(is_numeric($value)) {
+            $value += 0; //trick to convert numeric values
+        }
+
+        if(method_exists($targetObject, $setterMethod)) {
+            $targetObject->$setterMethod($value);
+        } else {
+            $targetObject->$propertyName = $value;
+        }
     }
 
     protected function createTypes($requestedTypes)
@@ -112,7 +129,7 @@ class Mapper implements Mappable
     protected function loadType($type)
     {
         if(isset($this->options['entityStore'])) {
-            $type = $this->options['entityStore'] . $type;
+            $type = $this->options['entityStore'] . '\\' . $type;
         }
 
         return new $type();

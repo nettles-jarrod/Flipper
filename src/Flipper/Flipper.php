@@ -52,7 +52,7 @@ class Flipper
         $result = $this->query($requestedTypes, $sql, $params, $splitMapper);
 
         if($result && isset($result[0])) {
-            return $result;
+            return $result[0];
         }
 
         return null;

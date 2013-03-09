@@ -13,12 +13,12 @@ class Author
     public $author_id;
 
     /**
-     * @ORM\Column(name="name")
+     * @ORM\Column(name="first_name")
      */
-    public $name;
+    public $first_name;
 
     /**
-     * @ORM\Column(name="birth_date")
+     * @ORM\Column(name="last_name")
      */
-    public $birth;
+    public $last_name;
 }

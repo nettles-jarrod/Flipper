@@ -5,7 +5,7 @@ namespace Flipper\Tests;
 use Flipper\Mapper\Mapper;
 
 /**
- * @group Flipper
+ * @group Mapper
  */
 class MapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +36,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mapper = new Mapper([
-            'entityStore' => 'Flipper\\Tests\\Entity\\'
+            'entityStore' => 'Flipper\\Tests\\Entity'
         ]);
     }
 

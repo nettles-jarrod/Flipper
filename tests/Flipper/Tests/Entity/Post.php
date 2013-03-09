@@ -9,36 +9,56 @@ class Post
     /**
      * @ORM\Column(name="post_id")
      */
-    protected $id;
+    protected $post_id;
 
     /**
-     * @ORM\Column(name="post_title")
+     * @ORM\Column(name="author_id")
+     */
+    protected $author_id;
+
+    /**
+     * @ORM\Column(name="created_date")
+     */
+    protected $created_date;
+
+    /**
+     * @ORM\Column(name="title")
      */
     protected $title;
 
     /**
-     * @ORM\Column(name="post_body")
+     * @ORM\Column(name="body")
      */
     protected $body;
 
-    public function setBody($body)
+    public function setPostId($post_id)
     {
-        $this->body = $body;
+        $this->post_id = $post_id;
     }
 
-    public function getBody()
+    public function getPostId()
     {
-        return $this->body;
+        return $this->post_id;
     }
 
-    public function setID($id)
+    public function setAuthorId($author_id)
     {
-        $this->id = $id;
+        $this->author_id = $author_id;
     }
 
-    public function getId()
+    public function getAuthorId()
     {
-        return $this->id;
+        return $this->author_id;
+    }
+
+    public function setCreatedDate($created_date)
+    {
+        $this->created_date = $created_date;
+    }
+
+    public function getCreatedDate()
+    {
+        return $this->created_date;
     }
 
     public function setTitle($title)
@@ -49,5 +69,15 @@ class Post
     public function getTitle()
     {
         return $this->title;
+    }
+
+    public function setBody($body)
+    {
+        $this->body = $body;
+    }
+
+    public function getBody()
+    {
+        return $this->body;
     }
 }
