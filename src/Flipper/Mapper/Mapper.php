@@ -76,14 +76,6 @@ class Mapper implements Mappable
             }
 
             $this->mapProperty($currentObject, $key, $value);
-
-            /*$setterMethod = 'set' . $key;
-
-            if(method_exists($currentObject, $setterMethod)) {
-                $currentObject->$setterMethod($value);
-            } else {
-                $currentObject->$key = $value;
-            }*/
         }
 
         if(1 === count($objects)) {
@@ -95,7 +87,7 @@ class Mapper implements Mappable
 
     protected function mapProperty($targetObject, $propertyName, $value)
     {
-        $setterMethod = 'set' . $propertyName;
+        $setterMethod = 'set' . str_replace('_', '', $propertyName);
 
         if(is_numeric($value)) {
             $value += 0; //trick to convert numeric values
