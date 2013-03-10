@@ -38,9 +38,9 @@ Here is the simplest Flipper example.
 use \Flipper\Flipper;
 
 $data = [
-    'id' => 35487,
+    'id'    => 35487,
     'title' => 'Call of the Wild',
-    'body' => 'Dark spruce forest frowned on either side the frozen waterway.'
+    'body'  => 'Dark spruce forest frowned on either side the frozen waterway.'
 ];
 
 $mapper = new Flipper();
@@ -51,9 +51,9 @@ $post = $mapper->mapOne('Post', $data);
 /**
 ..Post Object
 (
-    [id:public] => 35487
+    [id:public]    => 35487
     [title:public] => Call of the Wild
-    [body:public] => Dark spruce forest frowned on either side the frozen waterway.
+    [body:public]  => Dark spruce forest frowned on either side the frozen waterway.
 )
 **/
 
