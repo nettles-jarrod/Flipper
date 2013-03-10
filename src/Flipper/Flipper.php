@@ -35,6 +35,13 @@ class Flipper
         $this->options = array_merge($this->options, $options);
     }
 
+    /**
+     * @param $requestedTypes
+     * @param $sql
+     * @param array $params
+     * @param array $splitMapper
+     * @return array
+     */
     public function query($requestedTypes, $sql, $params = [], $splitMapper = [])
     {
         if(!$sql instanceof Statement) {
@@ -47,6 +54,13 @@ class Flipper
         return Mapper::_($this->options)->map($requestedTypes, $results, $splitMapper);
     }
 
+    /**
+     * @param $requestedTypes
+     * @param $sql
+     * @param array $params
+     * @param array $splitMapper
+     * @return object|array|null
+     */
     public function queryOne($requestedTypes, $sql, $params = [], $splitMapper = [])
     {
         $result = $this->query($requestedTypes, $sql, $params, $splitMapper);
