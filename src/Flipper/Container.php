@@ -13,12 +13,12 @@ class Container
      * This is a container for data that can be mapped by Flipper. You can pass in a PHP array or any object that
      * implements the Iterator or IteratorAggregate interfaces.
      * @param $source
-     * @throws DataException
+     * @throws \InvalidArgumentException
      */
     public function __construct($source)
     {
         if(!$this->isMappable($source)) {
-            throw new DataException('Whoops, the data you passed to Flipper isn\'t traversable. Did you
+            throw new \InvalidArgumentException('Whoops, the data you passed to Flipper isn\'t traversable. Did you
             forget to pass in an array or something that implements Iteratator or IteratorAggregate?');
         }
 

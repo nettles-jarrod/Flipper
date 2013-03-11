@@ -2,7 +2,7 @@
 
 namespace Flipper\Tests;
 
-use Flipper\Mapper\Mapper;
+use Flipper\Mapper;
 
 /**
  * @group Mapper
@@ -10,7 +10,7 @@ use Flipper\Mapper\Mapper;
 class MapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Flipper\Mapper\Mapper
+     * @var \Flipper\Mapper
      */
     protected $mapper;
 
@@ -43,7 +43,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     public function testStaticConstruct()
     {
         $mapper = Mapper::_();
-        $this->assertInstanceOf('\Flipper\Mapper\Mapper', $mapper);
+        $this->assertInstanceOf('\Flipper\Mapper', $mapper);
     }
 
     public function testMapOne()

@@ -5,7 +5,7 @@ namespace Flipper;
 use \Doctrine\DBAL\Connection as DBALConnection,
     \Doctrine\DBAL\Statement;
 
-use \Flipper\Mapper\Mapper;
+use \Flipper\Mapper;
 
 class Flipper
 {
@@ -14,6 +14,9 @@ class Flipper
      */
     protected $connection;
 
+    /**
+     * @var array
+     */
     protected $options = [
         'defaultSplitter'   => 'id',
         'entityStore'       => '\\'
@@ -25,14 +28,25 @@ class Flipper
         $this->setOptions($options);
     }
 
+    /**
+     * Statically create an instance of Flipper.
+     * @param array $options
+     * @return Flipper
+     */
     public static function _(array $options = [])
     {
         return new static($options);
     }
 
+    /**
+     * Set an array of options for Flipper to use in its operations.
+     * @param array $options
+     * @return Flipper
+     */
     public function setOptions(array $options)
     {
         $this->options = array_merge($this->options, $options);
+        return $this;
     }
 
     /**
@@ -70,12 +84,5 @@ class Flipper
         }
 
         return null;
-    }
-
-    protected function bindParameters(Statement $statement, array $params)
-    {
-        foreach($params as $key => $value) {
-            $statement->bindValue($key, $value);
-        }
     }
 }
