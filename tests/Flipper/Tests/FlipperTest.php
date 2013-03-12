@@ -47,7 +47,7 @@ class FlipperTest extends \PHPUnit_Framework_TestCase
                   left join author a on p.author_id = a.author_id
                   where p.post_id = :id';
 
-        $result = $this->flipper->queryOne(['Author', 'Post'], $query, ['id' => 1], $splitMapper = 'post_id');
+        $result = $this->flipper->queryOne(['Author', 'Post'], $query, ['id' => 1], $split = 'post_id');
 
         $author = $result['author']; /** @var $author \Flipper\Tests\Entity\Author */
         $post = $result['post']; /** @var $post \Flipper\Tests\Entity\Post */

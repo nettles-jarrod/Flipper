@@ -6,10 +6,20 @@ use Flipper\Container;
 
 class Mapper
 {
+    /**
+     * Default options to use with the mapper.
+     * @var array
+     */
     protected $options = [
         'defaultSplitter'   => 'id',
         'entityStore'       => '\\'
     ];
+
+    /**
+     * This provides a fast lookup mechanism for creating new objects properly.
+     * @var array
+     */
+    protected static $typeStore = [];
 
     /**
      * The Mapper is a standalone, data-agnostic class that maps arrays of data to objects.
@@ -55,7 +65,7 @@ class Mapper
      * you requested. The resulting array will be the size of the number of types that you request.
      *
      * @param string|array $requestedTypes The types that you wish your data to be mapped against.
-     * @param $data A single row of data to map.
+     * @param $data mixed A single row of data to map.
      * @param array $split The property name to split the results on. This lets the mapper know to move to the next
      * requested type in its mapping. You can specify multiple splitters in an array or a single one in a string.
      * @return array|object|null

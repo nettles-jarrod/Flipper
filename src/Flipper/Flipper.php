@@ -50,13 +50,13 @@ class Flipper
     }
 
     /**
-     * @param $requestedTypes
-     * @param $sql
+     * @param string|array $requestedTypes
+     * @param string|object|Statement $sql
      * @param array $params
-     * @param array $splitMapper
+     * @param string|array $split
      * @return array
      */
-    public function query($requestedTypes, $sql, $params = [], $splitMapper = [])
+    public function query($requestedTypes, $sql, $params = [], $split = [])
     {
         if(!$sql instanceof Statement) {
             $sql = $this->connection->prepare($sql);
@@ -65,19 +65,19 @@ class Flipper
         $sql->execute($params);
         $results = $sql->fetchAll();
 
-        return Mapper::_($this->options)->map($requestedTypes, $results, $splitMapper);
+        return Mapper::_($this->options)->map($requestedTypes, $results, $split);
     }
 
     /**
-     * @param $requestedTypes
-     * @param $sql
+     * @param string|array $requestedTypes $requestedTypes
+     * @param string|object|Statement $sql
      * @param array $params
-     * @param array $splitMapper
+     * @param string|array $split
      * @return object|array|null
      */
-    public function queryOne($requestedTypes, $sql, $params = [], $splitMapper = [])
+    public function queryOne($requestedTypes, $sql, $params = [], $split = [])
     {
-        $result = $this->query($requestedTypes, $sql, $params, $splitMapper);
+        $result = $this->query($requestedTypes, $sql, $params, $split);
 
         if($result && isset($result[0])) {
             return $result[0];

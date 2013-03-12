@@ -88,7 +88,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             'body'      => 'Dark spruce forest frowned on either side the frozen waterway.'
         ];
 
-        $results = $this->mapper->mapOne(['Author', 'Post'], $set, $splitMapper = ['post_id']);
+        $results = $this->mapper->mapOne(['Author', 'Post'], $set, $split = ['post_id']);
 
         $this->assertSame(1,             $results['author']->author_id);
         $this->assertSame('Jack London', $results['author']->name);
