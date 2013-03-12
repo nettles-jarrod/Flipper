@@ -1,7 +1,7 @@
 Flipper - (!ORM)
 ===
 
-Flipper is a simple micro-mapper. You can use it to map data to a class, existing object, or even your Doctrine or Propel entities. It was born out of frustration with having to specify complicated associations between Doctrine entities in order to build reports.
+Flipper is a simple way of writing SQL and having it map to objects. You can use it to map data to any type of class; even your Doctrine or Propel entities! It was born out of frustration with having to specify complex associations between Doctrine entities in order to build complicated reports.
 
 **This project is still very much in development! Certain aspects may change significantly, or disappear altogether! Proceed with caution!**
 
@@ -38,39 +38,13 @@ Here are the design goals of the project.
 
 Enough talking, you. Show me the code.
 ---
-Here is the simplest Flipper example - mapping an existing array to an object.
+Here is the simplest Flipper example - querying a single row from a database.
 
 ```php
 require_once('vendor/autoload.php');
 
 use \Flipper\Flipper;
 
-$data = [
-    'id'    => 35487,
-    'title' => 'Call of the Wild',
-    'body'  => 'Dark spruce forest frowned on either side the frozen waterway.'
-];
-
-$flipper = new Flipper();
-$post = $flipper->mapOne('Post', $data);
-
-//print_r result
-
-/**
-..Post Object
-(
-    [id:public]    => 35487
-    [title:public] => Call of the Wild
-    [body:public]  => Dark spruce forest frowned on either side the frozen waterway.
-)
-**/
-
-```
-
-Typically though, you'll be trying to query the database for results, and map those to objects. Here's the same thing, this time querying the database for the information (we'll assume its the same data.)
-
-
-```php
 $post = $flipper->queryOne('Post', 'select * from post where post_id = :id', ['id' => 35487]);
 
 //print_r result
@@ -121,7 +95,7 @@ Array
 
 ```
 
-The ```$split``` parameter might be confusing at first. Flipper operates on your dataset, not on your objects. In our previous example, we've specified that we would like two different classes to be created and filled with data. With the split parameter, we're telling Flipper where to stop filling the first object and to start filling the second. You will typically need to specify a split for each additional object that you request.
+The ```$split``` parameter might be confusing at first. Flipper operates on your data, not on your objects. In our previous example, we've specified that we would like two different classes to be created and filled with data. With the split parameter, we're telling Flipper where to stop filling the first object and to start filling the second. You will typically need to specify a split for each additional object that you request.
 
 
 Features
@@ -179,8 +153,8 @@ Probably not!
 
 Flipper was born out of my frustration with large ORMs like Doctrine. While it is an *amazing* project, I feel that the abstraction has started to go too far in some areas. Abstractions can be powerful but when you start to see an entirely new environment sprout up around your abstraction, there's a bit of a problem. Suddenly we're in an entirely different atmosphere. Programmers have gone from learning to write SQL - a very useful skill - to learning how to endlessly abstract away the need to write SQL. We've built a fifty mile bypass to avoid a small hill. Flipper gives you a tunnel.
 
-1. Abstracting away our writes to the database is good - it promotes data integrity. 
-2. Abstracting our reads is bad.
+1. Abstracting all our writes to the database is good - it promotes data integrity. 
+2. Abstracting all our reads can be bad.
 
 
 
