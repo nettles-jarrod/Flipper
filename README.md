@@ -158,6 +158,6 @@ Flipper was born out of my frustration with large ORMs like Doctrine. While it i
 1. Abstracting all our writes to the database is good - it promotes data integrity. 
 2. Abstracting all our reads can be bad.
 
-
+Want more information? [The wiki](https://github.com/Blackshawk/Flipper/wiki) has additional details.
 
 
