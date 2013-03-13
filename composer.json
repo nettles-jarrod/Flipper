@@ -4,7 +4,6 @@
     "license": "MIT",
     "require": {
         "php": ">=5.4",
-        "doctrine/orm": "2.3.*",
         "doctrine/dbal": "2.3.*"
     },
 
