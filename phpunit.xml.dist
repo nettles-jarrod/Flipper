@@ -12,7 +12,7 @@
          bootstrap="vendor/autoload.php"
         >
     <testsuites>
-        <testsuite name="Flipper Test Suite">
+        <testsuite name="Flipper Tests">
             <directory>./tests/Flipper/</directory>
         </testsuite>
     </testsuites>
