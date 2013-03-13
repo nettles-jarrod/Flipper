@@ -1,6 +1,6 @@
 {
     "name": "blackshawk/flipper",
-    "description": "An object mapper that gives you what you want and gets out of your way. Done.",
+    "description": "Execute queries and map the results to one or more objects without defining relationships between your objects.",
     "license": "MIT",
     "require": {
         "php": ">=5.4",
