@@ -45,6 +45,8 @@ require_once('vendor/autoload.php');
 
 use \Flipper\Flipper;
 
+$flipper = new Flipper($connection); //where $connection is a DBAL instance
+
 $post = $flipper->queryOne('Post', 'select * from post where post_id = :id', ['id' => 35487]);
 
 //print_r result
