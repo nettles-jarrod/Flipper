@@ -2,7 +2,7 @@
 
 namespace Flipper;
 
-use \Doctrine\DBAL\Connection as DBALConnection,
+use \Doctrine\DBAL\Driver\Connection as DBALConnection,
     \Doctrine\DBAL\Statement;
 
 use \Flipper\Mapper;
@@ -10,7 +10,7 @@ use \Flipper\Mapper;
 class Flipper
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var \Doctrine\DBAL\Driver\Connection
      */
     protected $connection;
 
@@ -22,33 +22,19 @@ class Flipper
     ];
 
     /**
-     * @param \Doctrine\DBAL\Connection $connection
+     * @var Mapper
+     */
+    protected $mapper;
+
+    /**
+     * @param \Doctrine\DBAL\Driver\Connection $connection
      * @param array $options
      */
     public function __construct(DBALConnection $connection = null, array $options = [])
     {
         $this->connection = $connection;
         $this->setOptions($options);
-    }
-
-    /**
-     * Set an array of options for Flipper to use in its operations.
-     * @param array $options
-     * @return Flipper
-     */
-    public function setOptions(array $options)
-    {
-        $this->options = array_merge($this->options, $options);
-        return $this;
-    }
-
-    /**
-     * Set the DBAL connection to use.
-     * @param \Doctrine\DBAL\Connection $connection
-     */
-    public function setConnection(DBALConnection $connection)
-    {
-        $this->connection = $connection;
+        $this->mapper = new Mapper($this->options);
     }
 
     /**
@@ -73,7 +59,7 @@ class Flipper
         $sql->execute($params);
         $results = $sql->fetchAll();
 
-        return Mapper::_($this->options)->map($requestedTypes, $results, $split);
+        return $this->mapper->map($requestedTypes, $results, $split);
     }
 
     /**
@@ -94,5 +80,41 @@ class Flipper
         }
 
         return null;
+    }
+
+    /**
+     * Set an array of options for Flipper to use in its operations.
+     * @param array $options
+     * @return Flipper
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = array_merge($this->options, $options);
+        return $this;
+    }
+
+    /**
+     * Set the DBAL connection to use.
+     * @param \Doctrine\DBAL\Driver\Connection $connection
+     */
+    public function setConnection(DBALConnection $connection)
+    {
+        $this->connection = $connection;
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Driver\Connection
+     */
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    /**
+     * @return Mapper
+     */
+    public function getMapper()
+    {
+        return $this->mapper;
     }
 }

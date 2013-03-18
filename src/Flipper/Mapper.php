@@ -31,6 +31,17 @@ class Mapper
     }
 
     /**
+     * Set an array of options for the mapper to use.
+     * @param array $options
+     * @return Mapper
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = array_merge($this->options, $options);
+        return $this;
+    }
+
+    /**
      * Statically create an instance of the Mapper class.
      * @param array $options
      * @return Mapper
