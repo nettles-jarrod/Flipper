@@ -128,4 +128,34 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('White Fang', $results[0]['post']->getTitle());
         $this->assertSame('Moby-Dick',  $results[1]['post']->getTitle());
     }
+
+    public function testObjectMapTest()
+    {
+        $set = [
+            [
+                'author_id' => 1,
+                'name'      => 'Jack London',
+                'birth'     => '1/12/1876',
+                'post_id'   => 3,
+                'title'     => 'White Fang',
+                'body'      => 'Dark spruce forest frowned on either side the frozen waterway.'
+            ],
+            [
+                'author_id' => 2,
+                'name'      => 'Herman Melville',
+                'birth'     => '8/1/1819',
+                'post_id'   => 4,
+                'title'     => 'Moby-Dick',
+                'body'      => 'Call me Ishmael.'
+            ]
+        ];
+
+        $set = json_decode(json_encode($set));
+
+        $results = $this->mapper->map(['Author', 'Post'], $set, $split = 'post_id');
+
+        $this->assertCount(2, $results);
+        $this->assertSame('White Fang', $results[0]['post']->getTitle());
+        $this->assertSame('Moby-Dick',  $results[1]['post']->getTitle());
+    }
 }

@@ -120,12 +120,12 @@ class Mapper
      * Iterates over the columns of data in the row and sends each requested object/key-value pair
      * to the property mapper. If multiple objects are requested, an array of those objects will be
      * returned. If a single object is requested, only that object will be returned.
-     * @param array $row
+     * @param array|object $row
      * @param array $objects
      * @param array $splitMapper
      * @return array|object
      */
-    protected function mapRow(array $row, array $objects, array $splitMapper)
+    protected function mapRow($row, array $objects, array $splitMapper)
     {
         $currentObject = reset($objects);
 

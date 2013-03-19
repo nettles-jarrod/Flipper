@@ -31,11 +31,11 @@ class Container
      */
     public function hasMultipleResults()
     {
-        if(count($this->source) == count($this->source, COUNT_RECURSIVE)) {
-            return false;
+        if(isset($this->source[0]) && (is_array($this->source[0]) || is_object($this->source[0]))) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
